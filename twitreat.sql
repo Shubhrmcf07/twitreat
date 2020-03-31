@@ -19,6 +19,7 @@
 -- Table structure for table `Attending`
 --
 CREATE DATABASE `twitreat`;
+USE `twitreat`;
 
 DROP TABLE IF EXISTS `Attending`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
