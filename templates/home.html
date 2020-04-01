@@ -62,9 +62,11 @@
   <div class="row">
     <div class="col-sm-3 well">
       <div class="well">
-        <p><a href="#">My Profile</a></p>
-        <img src="bird.jpg" class="img-circle" height="65" width="65" alt="Avatar">
-		<p>Bio</p>
+        <p><a href="/myprofile">My Profile</a></p>
+        <img src="{{auth.picture}}" class="img-circle" height="65" width="65" alt="Avatar">
+        {% if auth.bio != None %}
+        <p>{{auth.bio}}</p>
+        {% endif %}
       </div>
 
 	  <div class="well">

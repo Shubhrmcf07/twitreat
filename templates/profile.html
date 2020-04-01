@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #frm,
+      #frm2 {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="{{user.picture}}" height="70px" width="70px" />
+    <br />
+    <button onclick="fun2()">Update Profile Picture</button>
+    <br />
+    <form
+      action="/uploadr"
+      method="POST"
+      enctype="multipart/form-data"
+      id="frm2"
+    >
+      <input type="file" name="file" />
+      <input type="submit" />
+    </form>
+    <br />
+    {{user.bio}}
+    <br />
+    <button onclick="fun()">Add/Update Bio</button>
+
+    <form action="/createBio" method="POST" id="frm">
+      Type People About You :
+      <br />
+      <textarea name="bio" id="" cols="30" rows="10"></textarea>
+      <input type="submit" />
+    </form>
+
+    <script>
+      function fun() {
+        document.getElementById("frm").style.display = "block";
+      }
+
+      function fun2() {
+        document.getElementById("frm2").style.display = "block";
+      }
+    </script>
+  </body>
+</html>
