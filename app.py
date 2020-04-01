@@ -63,16 +63,14 @@ def login():
     if request.method == 'POST':
         email = request.form["email"]
         password = request.form["password"]
-        sql = "select * from Users where email = '%s';" % (
-            email, password)
+        sql = "select * from Users where email = '%s';" % (email)
         cursor.execute(sql)
         data = cursor.fetchall()
-
         # If it can't find an account with matching credentials
         if len(data) == 0:
             return render_template('./login.html', error="Wrong email")
             # If passwords do not match
-        elif not bcrypt.check_password_hash(data[0].password, password):
+        elif not bcrypt.check_password_hash(data[0][2], password):
             return render_template('./login.html', error="Incorrect Password")
 
         # Account found
@@ -134,7 +132,6 @@ def register():
 
     cursor.execute("insert into Users (name, password, gender, dob, email) values (%s,%s,%s,%s,%s);", (
         name, pw_hash, int(gender), dob, email))
-
     mydb.commit()
 
 
