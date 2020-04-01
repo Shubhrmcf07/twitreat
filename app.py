@@ -3,7 +3,6 @@ import mysql.connector
 from os.path import join, dirname
 from dotenv import load_dotenv
 from flask import *
-from werkzeug.security import generate_password_hash
 import random
 
 dotenv_path = join(dirname(__file__), '.env')
