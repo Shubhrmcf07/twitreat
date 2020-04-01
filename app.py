@@ -148,7 +148,7 @@ def register():
 		return render_template('./register.html', error="Password too short")
 
 	if password != confirmpw:
-		return render_template('./register.html', error="Passwords do not match<br>")
+		return render_template('./register.html', error="Passwords do not match")
 
 	sql = "select * from Users where email='%s';" % (email)
 
