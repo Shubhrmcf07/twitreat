@@ -114,10 +114,13 @@ def register():
     dob = request.form['dob']
 
     if not name or not email or not password or not confirmpw or not gender or not dob:
-        return redirect(url_for('register'))
+        return render_template('./register.html', error="All fields required")
+
+    if len(password) < 6:
+        return render_template('./register.html', error="Password too short")
 
     if password != confirmpw:
-        return redirect(url_for('register'))
+        return render_template('./register.html', error="Passwords do not match<br>")
 
     sql = "select * from Users where email='%s';" % (
         email)
@@ -126,13 +129,14 @@ def register():
     data = cursor.fetchall()
 
     if(len(data) > 1):
-        return redirect(url_for('register'))
+        return render_template('./register.html', "User already exists")
 
     pw_hash = bcrypt.generate_password_hash(password)
 
     cursor.execute("insert into Users (name, password, gender, dob, email) values (%s,%s,%s,%s,%s);", (
         name, pw_hash, int(gender), dob, email))
     mydb.commit()
+    return redirect(url_for('home'))
 
 
 if __name__ == "__main__":
