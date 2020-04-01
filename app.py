@@ -122,8 +122,7 @@ def register():
     if password != confirmpw:
         return render_template('./register.html', error="Passwords do not match<br>")
 
-    sql = "select * from Users where email='%s';" % (
-        email)
+    sql = "select * from Users where email='%s';" % (email)
 
     cursor.execute(sql)
     data = cursor.fetchall()

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Twitreat</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="static/CSS/base.css">
+  <script src="static/JS/jquery.js"></script>
+  <script src="static/JS/bootstrap.js"></script>
   <style>
     /* Set black background color, white text and some padding */
     footer {
@@ -52,12 +52,15 @@
           <div class="form-group">
             <input class="btn btn-success" type="submit" name="login" value="Login">
           </div>
-
+		  <a href="{{ url_for('register') }}">New User? Sign Up Now</a>
         </form>
       </center>
         <!-- login form -->
       </div>
 
   </main>
+  <footer class="container-fluid text-center">
+    <p>©Twitreat,2020</p>
+  </footer>
 </body>
 </html>
