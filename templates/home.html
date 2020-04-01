@@ -64,10 +64,30 @@
       <div class="well">
         <p><a href="#">My Profile</a></p>
         <img src="bird.jpg" class="img-circle" height="65" width="65" alt="Avatar">
+		<p>Bio</p>
       </div>
-      <div class="well">
-        <p>Bio</p>
-      </div>
+
+	  <div class="well">
+		  <h4>Friend Requests</h4>
+                {% for f in userdata['requests'] %}
+                  <a href="#" style="font-size: 20px;">{{f[1]}}</a>
+				  <br>
+                  <a class="text-success" href="requests/add/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Accept</button></a>
+                  <a class="text-danger" href="requests/delete/{{f[0]}}"><button type="button" class="btn btn-danger" name="button">Decline</button></a>
+				  <br>
+                {% endfor %}
+	  </div>
+
+	  <div class="well">
+		  <h4>Friends</h4>
+              <ul>
+                {% for f in userdata['friends'] %}
+                  <a href="#" style="font-size: 20px;">{{f[0]}}</a>
+                  <a class="text-danger" href="friends/delete/{{f[1]}}"><button type="button" class="btn btn-danger" name="button">Unfriend</button></a>
+				  <br>
+                {% endfor %}
+              </ul>
+  	  </div>
     </div>
     <div class="col-sm-6">
 
@@ -109,9 +129,14 @@
     </div>
 
     <div class="col-sm-3 well">
-      <div class="well">
-        <p>Stuff</p>
-      </div>
+      <h4>People You May Know</h4>
+	  <hr>
+      {% for f in userdata['otherusers'] %}
+			<a href="#" style="font-size: 20px;">{{f[1]}}</a>
+			<br>
+      		<a class="text-success" href="friends/add/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Add Friend</button></a>
+			<hr>
+      {% endfor %}
     </div>
   </div>
 </div>
