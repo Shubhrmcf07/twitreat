@@ -57,17 +57,20 @@ def getfriendrequests(data):
     cursor.execute(sql)
     data["requests"] = cursor.fetchall()
 
+
 def getfriendsposts(userdata):
     # Gets all posts by friends
-    sql = 'select name,content,time_stamp,p_id,photo from Users,Posts where u_id = id and community is null and (u_id in (select u2_id from Friends where u1_id =%s) or u_id = %s)'%(session["userid"],session["userid"])
+    sql = 'select name,content,time_stamp,p_id,photo from Users,Posts where u_id = id and community is null and (u_id in (select u2_id from Friends where u1_id =%s) or u_id = %s)' % (
+        session["userid"], session["userid"])
     cursor.execute(sql)
     posts = cursor.fetchall()
-    posts = posts[::-1]	# Newest posts come first
+    posts = posts[::-1]  # Newest posts come first
     userdata['posts'] = posts
     sql = 'select comm_id,post_id, name,content,timestamp,Users.id from Comments join Users on Users.id = Comments.user_id'
     cursor.execute(sql)
     comments = cursor.fetchall()
     userdata['comments'] = comments
+
 
 def auth(page):
     # Session url holds the last visited link by the user
@@ -76,6 +79,7 @@ def auth(page):
         return True
     else:
         return False
+
 
 def refreshcookies():
     sql = "select * from Users where id = '%s';" % (session['userid'])
@@ -94,10 +98,11 @@ def refreshcookies():
     session['picture'] = data[0][10]
 
 
-@app.route('/',methods=['GET'])
+@app.route('/', methods=['GET'])
 def home():
     # If user not logged in
-    if not auth("/"): return redirect('/login')
+    if not auth("/"):
+        return redirect('/login')
     # Get all the details to display first and then render
     userdata = {}
     getuserdata(userdata)
@@ -105,7 +110,7 @@ def home():
     getallusers(userdata)
     getfriendsposts(userdata)
     getfriendrequests(userdata)
-    return render_template("./home.html",userdata = userdata, user = session['userid'], auth=session)
+    return render_template("./home.html", userdata=userdata, user=session['userid'], auth=session)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -178,7 +183,7 @@ def register():
     data = cursor.fetchall()
 
     if(len(data) > 1):
-        return render_template('./register.html', "User already exists")
+        return render_template('./register.html', error="User already exists")
 
     pw_hash = bcrypt.generate_password_hash(password)
 
@@ -229,7 +234,15 @@ def myprofile():
             data = cursor.fetchall()
             print(data)
 
-            return render_template('./profile.html', userdata=userdata, user=session, data=data)
+            l = []
+
+            for i in range(len(data)):
+                cursor.execute(
+                    "select * from Comments where post_id="+str(data[i][0]))
+                result = cursor.fetchall()
+                l.append(result)
+
+            return render_template('./profile.html', userdata=userdata, user=session, data=data, tr=l)
 
         return render_template('./login.html', error="You must be logged in!")
 
@@ -292,6 +305,26 @@ def posts():
 def delpost():
     dele = request.form['del']
     cursor.execute("delete from Posts where p_id=" + str(dele))
+    mydb.commit()
+    return redirect(url_for('myprofile'))
+
+
+@app.route('/comment', methods=['POST'])
+def comment():
+    id = session['userid']
+    content = request.form['content']
+    p_id = request.form['comment']
+
+    cursor.execute(
+        "insert into Comments (post_id, user_id, content) values (%s,%s,%s)", (p_id, id, content))
+    mydb.commit()
+    return redirect(url_for('myprofile'))
+
+
+@app.route('/delcom', methods=['POST'])
+def delcom():
+    id = request.form['delcom']
+    cursor.execute("delete from Comments where comm_id="+str(id))
     mydb.commit()
     return redirect(url_for('myprofile'))
 
