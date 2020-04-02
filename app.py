@@ -58,16 +58,16 @@ def getfriendrequests(data):
     data["requests"] = cursor.fetchall()
 
 def getfriendsposts(userdata):
-	# Gets all posts by friends
-	sql = 'select name,content,time_stamp,p_id,photosrc,p_id from Users,Posts where u_id = id and community is null and (u_id in (select u2_id from Friends where u1_id =%s) or u_id = %s)'%(session["userid"],session["userid"])
-	cursor.execute(sql)
-	posts = cursor.fetchall()
-	posts = posts[::-1]	# Newest posts come first
-	userdata['posts'] = posts
-	sql = 'select comm_id,post_id, name,content,timestamp,Users.id from Comments join Users on Users.id = Comments.user_id'
-	cursor.execute(sql)
-	comments = cursor.fetchall()
-	userdata['comments'] = comments
+    # Gets all posts by friends
+    sql = 'select name,content,time_stamp,p_id,photo from Users,Posts where u_id = id and community is null and (u_id in (select u2_id from Friends where u1_id =%s) or u_id = %s)'%(session["userid"],session["userid"])
+    cursor.execute(sql)
+    posts = cursor.fetchall()
+    posts = posts[::-1]	# Newest posts come first
+    userdata['posts'] = posts
+    sql = 'select comm_id,post_id, name,content,timestamp,Users.id from Comments join Users on Users.id = Comments.user_id'
+    cursor.execute(sql)
+    comments = cursor.fetchall()
+    userdata['comments'] = comments
 
 def auth(page):
     # Session url holds the last visited link by the user
@@ -96,16 +96,16 @@ def refreshcookies():
 
 @app.route('/',methods=['GET'])
 def home():
-	# If user not logged in
-	if not auth("/"): return redirect('/login')
-	# Get all the details to display first and then render
-	userdata = {}
-	getuserdata(userdata)
-	getuserfriends(userdata)
-	getallusers(userdata)
-	getfriendsposts(userdata)
-	getfriendrequests(userdata)
-	return render_template("./home.html",userdata = userdata, user = session['userid'], auth=session)
+    # If user not logged in
+    if not auth("/"): return redirect('/login')
+    # Get all the details to display first and then render
+    userdata = {}
+    getuserdata(userdata)
+    getuserfriends(userdata)
+    getallusers(userdata)
+    getfriendsposts(userdata)
+    getfriendrequests(userdata)
+    return render_template("./home.html",userdata = userdata, user = session['userid'], auth=session)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -245,7 +245,8 @@ def createBio():
         cursor.execute("update Users set bio=%s where id=%s", (
             bio, session['userid']))
         mydb.commit()
-    return redirect(url_for('home'))
+    refreshcookies()
+    return redirect(url_for('myprofile'))
 
 
 @app.route('/uploadr', methods=['POST'])
@@ -263,8 +264,8 @@ def upload_files():
                        ('static/userimg/'+f.filename, session['userid']))
 
         mydb.commit()
-
-    return redirect(url_for('home'))
+    refreshcookies()
+    return redirect(url_for('myprofile'))
 
 
 @app.route('/post', methods=['POST'])
