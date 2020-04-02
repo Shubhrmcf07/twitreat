@@ -108,25 +108,30 @@
      </div>
      <!--  -->
      <!-- Posts -->
-      <form method="post" action="#">
-              <div class="panel panel-default">
-                <div class="panel-footer">
-                  <span class="pull-left"><b>Name</b></span>
-                  <span class="pull-right">timestamp &ensp;</span>
-                </div>
-                <div class="panel-body">
-                  <p>Content</p>
-                </div>
-                <div class="panel-footer">
-                <div class="input-group">
-                  <input class="form-control" type="text" name="content" placeholder="Add a comment...">
-                  <span class="input-group-btn">
-                    <button class="btn btn-success" type="submit" name="comment">Comment</button>
-                  </span>
-                </div>
-              </form>
-            </div>
-          </div>
+	 {% for p in userdata['posts'] %}
+	  <form method="post" action="#">
+			  <div class="panel panel-default">
+				<div class="panel-footer">
+				   <span class="pull-left"><b>{{p[0]}}</b></span>
+				   <span class="pull-right">{{p[2]}} &ensp;</span>
+				</div>
+				<div class="panel-body">
+				  <p>{{p[1]}}</p><br>
+				  {% if p[4] != "None" %}
+				  <img src="{{p[4]}}" height="200px" width="200px">
+				  {%endif%}
+				</div>
+				<div class="panel-footer">
+				<div class="input-group">
+				  <input class="form-control" type="text" name="content" placeholder="Add a comment...">
+				  <span class="input-group-btn">
+					<button class="btn btn-success" type="submit" name="comment">Comment</button>
+				  </span>
+				</div>
+			  </form>
+			</div>
+		  </div>
+		 {% endfor %}
     <!--  -->
     </div>
 
@@ -143,9 +148,9 @@
   </div>
 </div>
 
-<footer class="container-fluid text-center">
+<!-- <footer class="container-fluid text-center">
   <p>©Twitreat,2020</p>
-</footer>
+</footer> -->
 
 </body>
 </html>

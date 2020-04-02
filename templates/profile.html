@@ -69,7 +69,7 @@
        <br>
        <br>
 	   <center>
-       <button id="btn btn-success" onclick="fun2()">Edit Profile Picture</button>
+       <button class="btn btn-success" onclick="fun2()">Edit Profile Picture</button>
        <form action="/uploadr" method="POST" enctype="multipart/form-data" id="frm2" >
          <input class="form-control-file" type="file" name="file" />
 		 <br>
@@ -108,13 +108,14 @@
       <form method="post" action="#">
               <div class="panel panel-default">
                 <div class="panel-footer">
-                  <span class="pull-left"><b>{{user.username}}</b></span>
-                  <span class="pull-right">{{data[i][3]}} &ensp;</span>
+					<span class="pull-left"><b>{{user.username}}</b></span>
+					<span class="pull-right"><button class="btn btn-danger" type="submit" formaction="/delpost" name="del" value="{{data[i][0]}}">Delete</button></span>
+					<span class="pull-right">{{data[i][3]}} &ensp;</span>
                 </div>
                 <div class="panel-body">
                   <p>{{data[i][2]}}</p><br>
                   {% if data[i][4] != "None" %}
-                  <img src="{{data[i][4]}}" height="100px" width="100px">
+                  <img src="{{data[i][4]}}" height="200px" width="200px">
                   {%endif%}
                 </div>
                 <div class="panel-footer">
@@ -122,13 +123,12 @@
                   <input class="form-control" type="text" name="content" placeholder="Add a comment...">
                   <span class="input-group-btn">
                     <button class="btn btn-success" type="submit" name="comment">Comment</button>
-                    <button class="btn btn-success" type="submit" formaction="/delpost" name="del" value="{{data[i][0]}}">Delete</button>
                   </span>
                 </div>
               </form>
-              {% endfor %}
             </div>
           </div>
+		  {% endfor %}
     <!--  -->
     </div>
 
@@ -157,10 +157,10 @@
     </div>
   </div>
 </div>
-
+<!--
 <footer class="container-fluid text-center">
   <p>©Twitreat,2020</p>
-</footer>
+</footer> -->
 
 <script>
   function fun(){
