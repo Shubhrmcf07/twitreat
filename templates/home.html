@@ -62,10 +62,10 @@
   <div class="row">
     <div class="col-sm-3 well">
       <div class="well">
-        <p><a href="/myprofile">My Profile</a></p>
-        <img src="{{auth.picture}}" class="img-circle" height="65" width="65" alt="Avatar">
+        <a href="/myprofile"><img src="{{auth.picture}}" class="img-circle" height="85" width="85" alt="Avatar"></a>
         {% if auth.bio != None %}
-        <p>{{auth.bio}}</p>
+		<h3>Bio</h3>
+        <h5><i>"{{auth.bio}}"</i></h5>
         {% endif %}
       </div>
 
