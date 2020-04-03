@@ -247,7 +247,7 @@ def groups(choice, id):
         cursor.execute(sql)
 
         mydb.commit()
-        return redirect(url_for('home'))
+        return redirect(session['url'])
 
     print(id)
 
@@ -371,7 +371,7 @@ def creategroup():
     cdesc = request.form['cdesc']
 
     cursor.execute(
-        "insert into Community (name, description) values ('%s','%s')" % (cname, cdesc))
+        "insert into Community (name, description, owner) values ('%s','%s','%s')" % (cname, cdesc, session['userid']))
 
     mydb.commit()
     return redirect(session['url'])
