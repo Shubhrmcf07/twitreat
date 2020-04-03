@@ -29,8 +29,8 @@ CREATE TABLE `Attending` (
   `user_id` int(10) NOT NULL,
   PRIMARY KEY (`event_id`,`user_id`),
   KEY `Attending_fk1` (`user_id`),
-  CONSTRAINT `Attending_fk0` FOREIGN KEY (`event_id`) REFERENCES `Events` (`e_id`),
-  CONSTRAINT `Attending_fk1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`)
+  CONSTRAINT `Attending_fk0` FOREIGN KEY (`event_id`) REFERENCES `Events` (`e_id`) ON DELETE CASCADE,
+  CONSTRAINT `Attending_fk1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,8 +55,8 @@ CREATE TABLE `Belongs` (
   `community_id` int(10) NOT NULL,
   PRIMARY KEY (`user_id`,`community_id`),
   KEY `Belongs_fk1` (`community_id`),
-  CONSTRAINT `Belongs_fk0` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`),
-  CONSTRAINT `Belongs_fk1` FOREIGN KEY (`community_id`) REFERENCES `Community` (`c_id`)
+  CONSTRAINT `Belongs_fk0` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `Belongs_fk1` FOREIGN KEY (`community_id`) REFERENCES `Community` (`c_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -85,8 +85,8 @@ CREATE TABLE `Comments` (
   PRIMARY KEY (`comm_id`),
   KEY `Comments_fk0` (`post_id`),
   KEY `Comments_fk1` (`user_id`),
-  CONSTRAINT `Comments_fk0` FOREIGN KEY (`post_id`) REFERENCES `Posts` (`p_id`),
-  CONSTRAINT `Comments_fk1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`)
+  CONSTRAINT `Comments_fk0` FOREIGN KEY (`post_id`) REFERENCES `Posts` (`p_id`) ON DELETE CASCADE,
+  CONSTRAINT `Comments_fk1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -139,7 +139,7 @@ CREATE TABLE `Events` (
   `mediasrc` varchar(2550) DEFAULT NULL,
   PRIMARY KEY (`e_id`),
   KEY `Events_fk0` (`host`),
-  CONSTRAINT `Events_fk0` FOREIGN KEY (`host`) REFERENCES `Users` (`id`)
+  CONSTRAINT `Events_fk0` FOREIGN KEY (`host`) REFERENCES `Users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -179,8 +179,8 @@ CREATE TABLE `Friends` (
   `u2_id` int(10) NOT NULL,
   PRIMARY KEY (`u1_id`,`u2_id`),
   KEY `Friends_fk1` (`u2_id`),
-  CONSTRAINT `Friends_fk0` FOREIGN KEY (`u1_id`) REFERENCES `Users` (`id`),
-  CONSTRAINT `Friends_fk1` FOREIGN KEY (`u2_id`) REFERENCES `Users` (`id`)
+  CONSTRAINT `Friends_fk0` FOREIGN KEY (`u1_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `Friends_fk1` FOREIGN KEY (`u2_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -210,8 +210,8 @@ CREATE TABLE `Messages` (
   PRIMARY KEY (`m_id`),
   KEY `Messages_fk0` (`From`),
   KEY `Messages_fk1` (`To`),
-  CONSTRAINT `Messages_fk0` FOREIGN KEY (`From`) REFERENCES `Users` (`id`),
-  CONSTRAINT `Messages_fk1` FOREIGN KEY (`To`) REFERENCES `Users` (`id`)
+  CONSTRAINT `Messages_fk0` FOREIGN KEY (`From`) REFERENCES `Users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `Messages_fk1` FOREIGN KEY (`To`) REFERENCES `Users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -243,8 +243,8 @@ CREATE TABLE `Posts` (
   PRIMARY KEY (`p_id`),
   KEY `Posts_fk0` (`u_id`),
   KEY `Posts_fk1` (`community`),
-  CONSTRAINT `Posts_fk0` FOREIGN KEY (`u_id`) REFERENCES `Users` (`id`),
-  CONSTRAINT `Posts_fk1` FOREIGN KEY (`community`) REFERENCES `Community` (`c_id`)
+  CONSTRAINT `Posts_fk0` FOREIGN KEY (`u_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `Posts_fk1` FOREIGN KEY (`community`) REFERENCES `Community` (`c_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

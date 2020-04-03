@@ -232,13 +232,12 @@ def myprofile():
             d = session['userid']
             cursor.execute("select * from Posts where u_id=" + str(d))
             data = cursor.fetchall()
-            print(data)
 
             l = []
 
             for i in range(len(data)):
                 cursor.execute(
-                    "select * from Comments where post_id="+str(data[i][0]))
+                    "select * from Comments,Users where user_id=id and post_id="+str(data[i][0]))
                 result = cursor.fetchall()
                 l.append(result)
 
@@ -318,7 +317,7 @@ def comment():
     cursor.execute(
         "insert into Comments (post_id, user_id, content) values (%s,%s,%s)", (p_id, id, content))
     mydb.commit()
-    return redirect(url_for('myprofile'))
+    return redirect(request.referrer)
 
 
 @app.route('/delcom', methods=['POST'])
@@ -326,7 +325,7 @@ def delcom():
     id = request.form['delcom']
     cursor.execute("delete from Comments where comm_id="+str(id))
     mydb.commit()
-    return redirect(url_for('myprofile'))
+    return redirect(request.referrer)
 
 
 if __name__ == "__main__":

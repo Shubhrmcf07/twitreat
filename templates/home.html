@@ -109,11 +109,12 @@
      <!--  -->
      <!-- Posts -->
 	 {% for p in userdata['posts'] %}
-	  <form method="post" action="#">
+	  <form method="post" action="comment">
 			  <div class="panel panel-default">
 				<div class="panel-footer">
 				   <span class="pull-left"><b>{{p[0]}}</b></span>
 				   <span class="pull-right">{{p[2]}} &ensp;</span>
+				   <span><br><br> </span>
 				</div>
 				<div class="panel-body">
 				  <p>{{p[1]}}</p><br>
@@ -125,11 +126,25 @@
 				<div class="input-group">
 				  <input class="form-control" type="text" name="content" placeholder="Add a comment...">
 				  <span class="input-group-btn">
-					<button class="btn btn-success" type="submit" name="comment">Comment</button>
+					<button class="btn btn-success" type="submit" name="comment" value="{{p[3]}}">Comment</button>
 				  </span>
 				</div>
 			  </form>
 			</div>
+			{% for c in userdata['comments'] %}
+                {% if c[1] == p[3] %}
+                <div class="panel-footer">
+				  <form method="POST" action="/delcom">
+					  <span class="pull-left"><b>{{c[2]}}	&ensp;</b></span>
+					  <span class="pull-left">{{c[3]}}</span>
+    				  {% if c[5] == user %}
+					 <span class="pull-right"><button class="btn btn-danger" type="submit" formaction="/delcom" name="delcom" value="{{c[0]}}" >Delete</button></span>
+					 {% endif %}
+					 <span><br><br> </span>
+				 </form>
+                </div>
+                {% endif %}
+                {% endfor %}
 		  </div>
 		 {% endfor %}
     <!--  -->

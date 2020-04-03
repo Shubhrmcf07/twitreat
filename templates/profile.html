@@ -111,6 +111,7 @@
 					<span class="pull-left"><b>{{user.username}}</b></span>
 					<span class="pull-right"><button class="btn btn-danger" type="submit" formaction="/delpost" name="del" value="{{data[i][0]}}">Delete</button></span>
 					<span class="pull-right">{{data[i][3]}} &ensp;</span>
+					<span><br><br> </span>
                 </div>
                 <div class="panel-body">
                   <p>{{data[i][2]}}</p><br>
@@ -127,17 +128,23 @@
                 </div>
               </form>
             </div>
-            
+			<!-- <button onclick="fun3()">Show Comments</button> -->
+			<div id="comms">
+			  {% for j in range (tr[i]|length) %}
+		   <div class="panel-footer">
+				  <form method="POST" action="/delcom">
+					  <span class="pull-left"><b>{{tr[i][j][6]}}	&ensp;</b></span>
+					  <span class="pull-left">{{tr[i][j][3]}}</span>
+					  {% if tr[i][j][2] == user.userid %}
+					  <span class="pull-right"><button class="btn btn-danger" type="submit" formaction="/delcom" name="delcom" value="{{tr[i][j][0]}}" >Delete</button></span>
+					  {% endif %}
+					  <span><br><br> </span>
+				  </form>
+		   </div>
+		   {% endfor %}
+	   </div>
           </div>
-
-          <button onclick="fun3()">Show Comments</button>
-          <div id="comms">
-            {% for j in range (tr[i]|length) %}
-                      <form method="POST" action="/delcom">{{tr[i][j][3]}}<button type="submit" formaction="/delcom" name="delcom" value="{{tr[i][j][0]}}">Delete</button></form>
-                      {% endfor %}
-      {% endfor %}
-    </div>
-          
+		{% endfor %}
     <!--  -->
     </div>
 
