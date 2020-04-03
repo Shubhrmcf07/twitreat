@@ -1,0 +1,26 @@
+<form action="/createvent" method="post">
+  Location : <input type="text" name="location" /> <br />
+  Description :<textarea name="edesc" cols="30" rows="10"></textarea><br />
+  <input type="submit" value="Create Event" />
+</form>
+
+<div style="float: right;">
+  1. {% for i in host %} {{i[3]}}
+  <a href="even/dele/{{i[0]}}"><button>Delete Event</button></a>
+  <br />
+  {% endfor %}
+</div>
+
+<div class="col-sm-6" style="float: middle;">
+  2. {% for i in attending %} {{i[3]}}
+  <a href="even/withdraw/{{i[0]}}"><button>Withdraw From Event</button></a>
+  <br />
+  {% endfor %}
+</div>
+
+<div class="col-sm-3 well">
+  3. {% for i in range (recommended|length) %} {{recommended[i][3]}}
+  <a href="even/join/{{recommended[i][0]}}"><button>Interested</button></a>
+  <br />
+  {% for j in range (tr[i]|length) %} {{tr[i][j][1]}} {% endfor %} {% endfor %}
+</div>
