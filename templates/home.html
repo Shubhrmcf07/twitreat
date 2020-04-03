@@ -17,6 +17,10 @@
       bottom: 0;
       width: 100%;
     }
+
+    #comms{
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -89,7 +93,31 @@
 				  <br>
                 {% endfor %}
               </ul>
-  	  </div>
+      </div>
+
+      <div class="well">
+        <h4>Groups</h4>
+                <ul>
+                  {% for f in userdata['groups'] %}
+                    <a href="#" style="font-size: 20px;">{{f[1]}}</a>
+                    <a class="text-danger" href="groups/leave/{{f[0]}}"><button type="button" class="btn btn-danger" name="button">Leave Group</button></a>
+            <br>
+                  {% endfor %}
+                </ul>
+        </div>
+
+      <div class="well">
+        <button onclick="fun3()">Create a group</button>
+        <form action="/creategroup" method="post" id="comms">
+          Create Group <br> 
+            Name : <input type="text" name="cname"><br>
+            Description : <textarea name="cdesc" cols="30" rows="10"></textarea>
+
+            <input type="submit" value="Create Group">
+        </form>
+      </div>
+      
+      
     </div>
     <div class="col-sm-6">
 
@@ -159,6 +187,17 @@
       		<a class="text-success" href="friends/add/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Add Friend</button></a>
 			<hr>
       {% endfor %}
+
+      {% if (userdata['othergroups']|length) > 0 %}
+      <h4>Communities you may like</h4>
+	  <hr>
+      {% for f in userdata['othergroups'] %}
+			<a href="#" style="font-size: 20px;">{{f[1]}}</a>
+			<br>
+      		<a class="text-success" href="groups/join/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Join Group</button></a>
+			<hr>
+      {% endfor %}
+      {% endif %}
     </div>
   </div>
 </div>
@@ -166,6 +205,17 @@
 <!-- <footer class="container-fluid text-center">
   <p>©Twitreat,2020</p>
 </footer> -->
+
+<script>
+    function fun3(){
+    var x = document.getElementById("comms")
+
+    if(x.style.display=="none")
+        x.style.display = "block";
+
+    else x.style.display = "none";
+  }
+</script>
 
 </body>
 </html>

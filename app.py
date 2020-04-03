@@ -42,12 +42,29 @@ def getuserfriends(userdata):
     # print(friends)
 
 
+def getusergroups(userdata):
+    # displays all groups user is in
+    sql = sql = "select * from Community where c_id in (select community_id from Belongs where user_id =%s)" % (
+        session['userid'])
+    cursor.execute(sql)
+    groups = cursor.fetchall()
+    userdata['groups'] = groups
+
+
 def getallusers(data):
     # Gets users which aren't already friends with current user
     sql = "select id,name from Users where id not in (select u2_id from Friends where u1_id = %s) and id <> %s and id not in (select u_id2 from Requests where u_id1 = %s);" % (
         session["userid"], session["userid"], session["userid"])
     cursor.execute(sql)
     data["otherusers"] = cursor.fetchall()
+
+
+def getallgroups(data):
+    # gets the groups of which user is not a part of
+    sql = "select * from Community where c_id not in (select community_id from Belongs where user_id =%s)" % (
+        session['userid'])
+    cursor.execute(sql)
+    data["othergroups"] = cursor.fetchall()
 
 
 def getfriendrequests(data):
@@ -110,6 +127,8 @@ def home():
     getallusers(userdata)
     getfriendsposts(userdata)
     getfriendrequests(userdata)
+    getallgroups(userdata)
+    getusergroups(userdata)
     return render_template("./home.html", userdata=userdata, user=session['userid'], auth=session)
 
 
@@ -221,6 +240,24 @@ def requests(choice, id):
     return redirect(session['url'])
 
 
+@app.route('/groups/<string:choice>/<string:id>')
+def groups(choice, id):
+    if choice == "join":
+        sql = "insert into Belongs values (%s,%s)" % (session['userid'], id)
+        cursor.execute(sql)
+
+        mydb.commit()
+        return redirect(url_for('home'))
+
+    print(id)
+
+    sql = "delete from Belongs where community_id=%s and user_id=%s" % (
+        id, session['userid'])
+    cursor.execute(sql)
+    mydb.commit()
+    return redirect(session['url'])
+
+
 @app.route('/myprofile', methods=['GET', 'POST'])
 def myprofile():
     if request.method == 'GET':
@@ -326,6 +363,18 @@ def delcom():
     cursor.execute("delete from Comments where comm_id="+str(id))
     mydb.commit()
     return redirect(request.referrer)
+
+
+@app.route('/creategroup', methods=['POST'])
+def creategroup():
+    cname = request.form['cname']
+    cdesc = request.form['cdesc']
+
+    cursor.execute(
+        "insert into Community (name, description) values ('%s','%s')" % (cname, cdesc))
+
+    mydb.commit()
+    return redirect(session['url'])
 
 
 if __name__ == "__main__":
