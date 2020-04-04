@@ -472,7 +472,7 @@ def events():
         frns = cursor.fetchall()
         l.append(frns)
 
-    return render_template('events.html', host=host, attending=attending, recommended=recommended, tr=l)
+    return render_template('events.html', host=host, attending=attending, recommended=recommended, tr=l, auth=session)
 
 
 @app.route('/even/<string:choice>/<string:id>')
