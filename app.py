@@ -6,6 +6,7 @@ from flask import *
 from flask_bcrypt import Bcrypt
 from datetime import date
 from werkzeug.utils import secure_filename
+from flask_socketio import SocketIO
 import random
 import datetime
 
@@ -23,7 +24,7 @@ cursor = mydb.cursor()
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.secret_key = "thisisatopsecretkey"
-
+socketio = SocketIO(app)
 
 def getuserdata(userdata):
     userdata['username'] = session['username']
@@ -494,6 +495,18 @@ def even(choice, id):
     mydb.commit()
     return redirect(url_for('events'))
 
+@app.route('/messenger')
+def messenger():
+    return render_template('messenger.html')
+
+def messageReceived(methods=['GET','POST']):
+    print('Received')
+
+@socketio.on('my event')
+def handle_my_custom_event(json, methods=['GET','POST']):
+    print('Event:' + str(json))
+    socketio.emit('my response',json,callback=messageReceived)
+
 
 if __name__ == "__main__":
-    app.run(port=3000, debug=True)
+    socketio.run(app,port=3000, debug=True)
