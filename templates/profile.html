@@ -188,7 +188,25 @@
   				  <br>
                   {% endfor %}
                 </ul>
-    	  </div>
+        </div>
+        <div class="well">
+          <button onclick="fun5()">Create A Page instead!</button>
+      <form
+        action="/createpage"
+        method="post"
+        style="display: none;"
+        id="pagecreate"
+      >
+        Page Name : <br><input type="text" name="name" /><br />
+        Page Description : <br /><textarea
+          name="pdesc"
+          cols="30"
+          rows="10"
+        ></textarea
+        ><br />
+        <input type="submit" value="Submit" />
+      </form>
+        </div>
     </div>
   </div>
 </div>
@@ -233,6 +251,17 @@ function fun(){
 
       else x.style.display = "none"
   }
+
+  function fun5(){
+    var x = document.getElementById("pagecreate")
+
+    if(x.style.display=="none")
+        x.style.display = "block";
+
+      else x.style.display = "none"
+  }
+
+  
 </script>
 
 </body>

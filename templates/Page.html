@@ -4,9 +4,9 @@
   <title>Twitreat</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="static/CSS/base.css">
-  <script src="static/JS/jquery.js"></script>
-  <script src="static/JS/bootstrap.js"></script>
+  <link rel="stylesheet" href="/static/CSS/base.css">
+  <script src="/static/JS/jquery.js"></script>
+  <script src="/static/JS/bootstrap.js"></script>
   <style>
     /* Set black background color, white text and some padding */
     footer {
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
         <li><a href="/">Home</a></li>
         <li><a href="/messages">Messages</a></li>
-        <li><a href="/events">Events</a></li>
+		<li><a href="/events">Events</a></li>
       </ul>
       <!-- <form class="navbar-form navbar-right" role="search">
         <div class="form-group input-group">
@@ -66,73 +66,34 @@
   </div> -->
   <div class="row">
     <div class="col-sm-3 well">
-      <div class="well">
-        <a href="/myprofile"><img src="{{auth.picture}}" class="img-circle" height="85" width="85" alt="Avatar"></a>
-        {% if auth.bio != None %}
-		<h3>Bio</h3>
-        <h5><i>"{{auth.bio}}"</i></h5>
-        {% endif %}
-      </div>
-
-	  <div class="well">
-		  <h4>Friend Requests</h4>
-                {% for f in userdata['requests'] %}
-                  <a href="/profile/{{f[0]}}" style="font-size: 20px;">{{f[1]}}</a>
-				  <br>
-                  <a class="text-success" href="requests/add/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Accept</button></a>
-                  <a class="text-danger" href="requests/delete/{{f[0]}}"><button type="button" class="btn btn-danger" name="button">Decline</button></a>
-				  <br>
-                {% endfor %}
-	  </div>
-
-	  <div class="well">
-		  <h4>Friends</h4>
-              <ul>
-                {% for f in userdata['friends'] %}
-                  <a href="/profile/{{f[1]}}" style="font-size: 20px;">{{f[0]}}</a>
-                  <a class="text-danger" href="friends/delete/{{f[1]}}"><button type="button" class="btn btn-danger" name="button">Unfriend</button></a>
-				  <br>
-                {% endfor %}
-              </ul>
-      </div>
-
-      <div class="well">
-        <h4>Groups</h4>
-                <ul>
-                  {% for f in userdata['groups'] %}
-                    <a href="/groupposts/{{f[0]}}" style="font-size: 20px;">{{f[1]}}</a>
-                    <a class="text-danger" href="groups/leave/{{f[0]}}"><button type="button" class="btn btn-danger" name="button">Leave Group</button></a>
-            <br>
+		<div class="well">
+			<p style="font-size: 20px;">{{page.name}}</p>
 			<br>
+			<h5><i>{{page.description}}</i></h5>
+		</div>
+      <div class="well">
+        <h4>Pages</h4>
+                <ul>
+                    {% for f in userdata['userpages'] %}
+                    <a href="/pageposts/{{f[0]}}" style="font-size: 20px;">{{f[1]}}</a>
+                    <a class="text-danger" href="page/leave/{{f[0]}}"><button type="button" class="btn btn-danger" name="button">Unfollow</button></a>
+            <br>
+        <br>
                   {% endfor %}
                 </ul>
-		          <button class="btn btn-success" onclick="fun3()">Create a group</button>
-		          <form action="/creategroup" method="post" id="comms">
-		              <input class="form-control" type="text" name="cname" placeholder="Name"><br>
-		              <textarea class="form-control" name="cdesc" cols="30" rows="10" placeholder="Description"></textarea>
-		              <input class="btn btn-success" type="submit" value="Create Group">
+		          <button class="btn btn-success" onclick="fun3()">Create a Page</button>
+		          <form action="/createpage" method="post" id="comms">
+		              <input class="form-control" type="text" name="name" placeholder="Name"><br>
+		              <textarea class="form-control" name="pdesc" cols="30" rows="10" placeholder="Description"></textarea>
+		              <input class="btn btn-success" type="submit" value="Create Page">
 		          </form>
         </div>
-
-        <div class="well">
-          <h4>Pages</h4>
-          <ul>
-            {% for f in userdata['userpages'] %}
-            <a href="/pageposts/{{f[0]}}" style="font-size: 20px;">{{f[1]}}</a>
-            <a class="text-danger" href="page/leave/{{f[0]}}"><button type="button" class="btn btn-danger" name="button">Unfollow</button></a>
-    <br>
-<br>
-          {% endfor %}
-
-          </ul>
-        </div>
-
     </div>
     <div class="col-sm-6">
 
       <!-- Add Post -->
      <div class="well">
-        <form method="post" action="/post" enctype="multipart/form-data">
+        <form method="post" action="/pageposts/{{page['id']}}" enctype="multipart/form-data">
           <div class="input-group">
             <input class="form-control" type="text" name="content" placeholder="Make a post...">
             <span class="input-group-btn">
@@ -146,7 +107,7 @@
      <!--  -->
      <!-- Posts -->
 	 {% for p in userdata['posts'] %}
-	  <form method="post">
+	  <form method="post" action="comment">
 			  <div class="panel panel-default">
 				<div class="panel-footer">
 				   <span class="pull-left"><b>{{p[0]}}</b></span>
@@ -156,7 +117,7 @@
 				<div class="panel-body">
 				  <p>{{p[1]}}</p><br>
 				  {% if p[4] != "None" %}
-				  	<img src="{{p[4]}}" height="200px" width="200px">
+				  	<img src="/{{p[4]}}" height="200px" width="200px">
 				  {%endif%}
 				</div>
 				<div class="panel-footer">
@@ -169,7 +130,7 @@
 					</span>
 				  <input class="form-control" type="text" name="content" placeholder="Add a comment...">
 				  <span class="input-group-btn">
-					<button class="btn btn-success" type="submit" name="comment" formaction="/comment" value="{{p[3]}}">Comment</button>
+					<button class="btn btn-success" type="submit" name="comment" value="{{p[3]}}">Comment</button>
 				  </span>
 				</div>
 			  </form>
@@ -194,36 +155,30 @@
     </div>
 
     <div class="col-sm-3 well">
-      <h4>People You May Know</h4>
-	  <hr>
-      {% for f in userdata['otherusers'] %}
-			<a href="/profile/{{f[0]}}" style="font-size: 20px;">{{f[1]}}</a>
+		<!-- <div class="well">
+			<h4>Group Members</h4>
 			<br>
-      		<a class="text-success" href="friends/add/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Add Friend</button></a>
-			<hr>
-      {% endfor %}
-
-      {% if (userdata['othergroups']|length) > 0 %}
-      <h4>Groups you may like</h4>
-	  <hr>
-      {% for f in userdata['othergroups'] %}
-			<a href="#" style="font-size: 20px;">{{f[1]}}</a>
-			<br>
-      		<a class="text-success" href="groups/join/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Join Group</button></a>
-			<hr>
-      {% endfor %}
-      {% endif %}
-
-      {% if (userdata['otherpages']|length) > 0 %}
-      <h4>Pages you may like</h4>
-	  <hr>
-      {% for f in userdata['otherpages'] %}
-			<a href="#" style="font-size: 20px;">{{f[1]}}</a>
-			<br>
-      		<a class="text-success" href="page/join/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Follow</button></a>
-			<hr>
-      {% endfor %}
-      {% endif %}
+			{% for u in users %}
+				{% if u[0] == session.userid %}
+				<a href="/myprofile" style="font-size: 20px;">{{u[3]}}</a>
+				{% else %}
+			    <a href="/profile/{{u[0]}}" style="font-size: 20px;">{{u[3]}}</a>
+				{% endif %}
+				<br>
+			{% endfor %}
+		</div> -->
+		{% if (userdata['otherpages']|length) > 0 %}
+		<div class="well">
+	        <h4>Pages you may like</h4>
+	  	  <hr>
+	        {% for f in userdata['otherpages'] %}
+	  			<a href="#" style="font-size: 20px;">{{f[1]}}</a>
+	  			<br>
+	        		<a class="text-success" href="/page/join/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Follow</button></a>
+	  			<hr>
+	        {% endfor %}
+	        {% endif %}
+		</div>
     </div>
   </div>
 </div>
