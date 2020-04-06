@@ -12,3 +12,5 @@ pycparser==2.20
 python-dotenv==0.10.3
 six==1.12.0
 Werkzeug==0.16.0
+flask-socketio
+

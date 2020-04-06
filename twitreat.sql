@@ -203,6 +203,7 @@ DROP TABLE IF EXISTS `Messages`;
 CREATE TABLE `Messages` (
   `m_id` int(10) NOT NULL AUTO_INCREMENT,
   `From` int(10) NOT NULL,
+  'room_id' int(100) NOT NULL,
   `To` int(10) NOT NULL,
   `Content` varchar(500) NOT NULL,
   `media` blob DEFAULT NULL,

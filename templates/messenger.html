@@ -9,14 +9,16 @@
 
 <body>
 
-    <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
-    <div class="participant"></div>
-    <div class="message_holder"></div>
+    <h3 style='text-align:center;color: #ccc;font-size: 20px;'>Welcome to chat room {{room}}</h3>
+    <div id="messages">
+        {% for message in messagedata %} {% if message != None %}
+        <div><b>{{message[1]}}:&nbsp;</b>{{message[0]}}</div>
+        {% else %} NONE {% endif %} {% endfor %}
+    </div>
 
-    <form action="" method="POST">
-        <input type="text" class="username" placeholder="User Name" />
-        <input type="text" class="message" placeholder="Messages" />
-        <input type="submit" />
+    <form id="form">
+        <input id="message_input" type="text" class="message" placeholder="Enter your message here..." />
+        <button type="submit">Send</button>
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -25,30 +27,61 @@
         var socket = io.connect('http://' + document.domain + ':' + location.port);
 
         socket.on('connect', function() {
-            socket.emit('my event', {
-                data: 'Connected'
-            })
+            socket.emit('join_room', {
+                username: "{{userdata['username']}}",
+                room: "{{room}}"
+            });
 
-            var form = $('form').on('submit', function(e) {
-                e.preventDefault()
-                let user_name = $('input.username').val()
-                let user_input = $('input.message').val()
-                socket.emit('my event', {
-                    user_name: user_name,
-                    message: user_input,
-                })
-                $('input.message').val('').focus()
-            })
-        })
+            let message_input = document.getElementById('message_input');
 
-        socket.on('my response', function(msg) {
-            console.log(msg)
+            document.getElementById("form").onsubmit = function(e) {
+                e.preventDefault();
+                let message = message_input.value.trim();
 
-            if (typeof msg.user_name !== 'undefined') {
-                $('h3').remove()
-                $('div.message_holder').append('<div><b style="color: #000">' + msg.user_name + ':</b> ' + msg.message + '</div>')
+                if (message.length) {
+                    socket.emit('send_message', {
+                        user_id: "{{userdata['userid']}}",
+                        friend_id: "{{room - userdata['userid']}}",
+                        username: "{{userdata['username']}}",
+                        room: "{{room}}",
+                        message: message
+                    })
+                }
+                message_input.value = "";
+                message_input.focus();
             }
+        });
+
+        window.onbeforeunload = function() {
+            socket.emit('leave_room', {
+                username: "{{ username }}",
+                room: "{{ room }}"
+            })
+        };
+
+
+        socket.on('receive_message', function(data) {
+            console.log(data);
+            const newNode = document.createElement('div');
+            newNode.innerHTML = `<b>${data.username}:&nbsp;</b> ${data.message}`;
+            document.getElementById('messages').appendChild(newNode);
         })
+
+        socket.on('join_room_announcement', function(data) {
+
+            if (data.username !== "{{ username }}") {
+                const newNode = document.createElement('div');
+                newNode.innerHTML = `<b>${data.username}</b> has joined the room`;
+                document.getElementById('messages').appendChild(newNode);
+            }
+        });
+
+        socket.on('leave_room_announcement', function(data) {
+
+            const newNode = document.createElement('div');
+            newNode.innerHTML = `<b>${data.username}</b> has left the room`;
+            document.getElementById('messages').appendChild(newNode);
+        });
     </script>
 </body>
 
