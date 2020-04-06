@@ -291,7 +291,7 @@ def myprofile():
             getuserfriends(userdata)
             getfriendrequests(userdata)
             d = session['userid']
-            cursor.execute("select * from Posts where u_id=" + str(d))
+            cursor.execute("select * from Posts where u_id=%s and community is null" %str(d))
             data = cursor.fetchall()
 
             l = []
@@ -319,7 +319,7 @@ def createBio():
             bio, session['userid']))
         mydb.commit()
     refreshcookies()
-    return redirect(url_for('myprofile'))
+    return redirect(request.referrer)
 
 
 @app.route('/uploadr', methods=['POST'])
@@ -338,7 +338,7 @@ def upload_files():
 
         mydb.commit()
     refreshcookies()
-    return redirect(url_for('myprofile'))
+    return redirect(request.referrer)
 
 
 @app.route('/post', methods=['POST'])
@@ -398,7 +398,7 @@ def creategroup():
         "insert into Community (name, description, owner) values ('%s','%s','%s')" % (cname, cdesc, session['userid']))
 
     mydb.commit()
-    return redirect(session['url'])
+    return redirect(request.referrer)
 
 
 @app.route('/groupposts/<string:id>', methods=['GET', 'POST'])
@@ -507,6 +507,29 @@ def handle_my_custom_event(json, methods=['GET','POST']):
     print('Event:' + str(json))
     socketio.emit('my response',json,callback=messageReceived)
 
+@app.route('/profile/<string:id>/')
+def profile(id):
+	sql = 'select * from Users where id = %s ;' %id
+	cursor.execute(sql)
+	user = cursor.fetchall()
+
+	sql2 = "select * from Posts where u_id=%s and community is null" %(id)
+	cursor.execute(sql2)
+	data = cursor.fetchall()
+
+	l = []
+
+	for i in range(len(data)):
+		cursor.execute(
+			"select * from Comments,Users where user_id=id and post_id="+str(data[i][0]))
+		result = cursor.fetchall()
+		l.append(result)
+
+	sql3 = 'select * from Friends,Users where u1_id = %s and u2_id=id;' %id
+	cursor.execute(sql3)
+	friends = cursor.fetchall()
+
+	return render_template('friend.html', user=user, data=data, tr=l, friends=friends)
 
 if __name__ == "__main__":
     socketio.run(app,port=3000, debug=True)

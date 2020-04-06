@@ -152,7 +152,11 @@
 			<h4>Group Members</h4>
 			<br>
 			{% for u in users %}
-				{{u[3]}}
+				{% if u[0] == session.userid %}
+				<a href="/myprofile" style="font-size: 20px;">{{u[3]}}</a>
+				{% else %}
+			    <a href="/profile/{{u[0]}}" style="font-size: 20px;">{{u[3]}}</a>
+				{% endif %}
 				<br>
 			{% endfor %}
 		</div>

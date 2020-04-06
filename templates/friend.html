@@ -4,9 +4,9 @@
   <title>Twitreat</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="static/CSS/base.css">
-  <script src="static/JS/jquery.js"></script>
-  <script src="static/JS/bootstrap.js"></script>
+  <link rel="stylesheet" href="/static/CSS/base.css">
+  <script src="/static/JS/jquery.js"></script>
+  <script src="/static/JS/bootstrap.js"></script>
   <style>
     /* Set black background color, white text and some padding */
     footer {
@@ -66,58 +66,34 @@
   </div> -->
   <div class="row">
     <div class="col-sm-3 well">
-		<img src="{{user.picture}}" class="img-circle" height="100" width="100" alt="Avatar">
+		<h3>{{user[0][1]}}</h3>
+		<br>
+		<br>
+		{% if user[0][10][0] == "h" %}
+		<img src="{{user[0][10]}}" class="img-circle" height="100" width="100" alt="Avatar">
+		{% else %}
+		<img src="/{{user[0][10]}}" class="img-circle" height="100" width="100" alt="Avatar">
+		{% endif %}
        <br>
        <br>
-	   <center>
-       <button class="btn btn-success" onclick="fun2()">Edit Profile Picture</button>
-       <form action="/uploadr" method="POST" enctype="multipart/form-data" id="frm2" >
-         <input class="form-control-file" type="file" name="file" />
-		 <br>
-         <input class="btn btn-success" type="submit" value="Update Profile Picture"/>
-       </form>
-   	   </center>
        <br>
 	   <h3>Bio</h3>
-       <h5><i>"{{user.bio}}"</i></h5>
-       <button class="btn btn-success" onclick="fun()">Update Bio</button>
-       <form action="/createBio" method="POST" id="frm">
-         <h5>Tell us about yourself</h5>
-         <textarea name="bio" id="" cols="30" rows="3"></textarea>
-		 <br>
-         <input class="btn btn-success" type="submit" value="Update Bio"/>
-       </form>
+       <h5><i>"{{user[0][5]}}"</i></h5>
     </div>
     <div class="col-sm-6">
-
-      <!-- Add Post -->
-     <div class="well">
-        <form method="post" action="post" enctype="multipart/form-data">
-          <div class="input-group">
-            <input class="form-control" type="text" name="content" placeholder="Make a post...">
-            <span class="input-group-btn">
-              <button class="btn btn-success" type="submit" name="post">Post</button>
-            </span>
-          </div>
-          <br>
-      <input class="form-control-file" type="file" name="picture"/>
-        </form>
-     </div>
-     <!--  -->
      <!-- Posts -->
      {% for i in range (data|length) %}
       <form method="post" action="/comment">
               <div class="panel panel-default">
                 <div class="panel-footer">
-					<span class="pull-left"><b>{{user.username}}</b></span>
-					<span class="pull-right"><button class="btn btn-danger" type="submit" formaction="/delpost" name="del" value="{{data[i][0]}}">Delete</button></span>
+					<span class="pull-left"><b>{{user[0][1]}}</b></span>
 					<span class="pull-right">{{data[i][3]}} &ensp;</span>
 					<span><br><br> </span>
                 </div>
                 <div class="panel-body">
                   <p>{{data[i][2]}}</p><br>
                   {% if data[i][4] != "None" %}
-                  <img src="{{data[i][4]}}" height="200px" width="200px">
+                  <img src="/{{data[i][4]}}" height="200px" width="200px">
                   {%endif%}
                 </div>
                 <div class="panel-footer">
@@ -150,26 +126,13 @@
     </div>
 
     <div class="col-sm-3 well">
-		<div class="well">
-  		  <h4>Friend Requests</h4>
-                  {% for f in userdata['requests'] %}
-                    <a href="/profile/{{f[0]}}" style="font-size: 20px;">{{f[1]}}</a>
-  				  <br>
-                    <a class="text-success" href="requests/add/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Accept</button></a>
-                    <a class="text-danger" href="requests/delete/{{f[0]}}"><button type="button" class="btn btn-danger" name="button">Decline</button></a>
-  				  <br>
-                  {% endfor %}
-  	  </div>
-
   	  <div class="well">
   		  <h4>Friends</h4>
-                <ul>
-                  {% for f in userdata['friends'] %}
-                    <a href="/profile/{{f[1]}}" style="font-size: 20px;">{{f[0]}}</a>
-                    <a class="text-danger" href="friends/delete/{{f[1]}}"><button type="button" class="btn btn-danger" name="button">Unfriend</button></a>
-  				  <br>
+                  {% for f in friends %}
+				  <center>
+                    <a href="/profile/{{f[1]}}" style="font-size: 20px;">{{f[3]}}</a>
+				</center>
                   {% endfor %}
-                </ul>
     	  </div>
     </div>
   </div>
@@ -178,17 +141,6 @@
 <footer class="container-fluid text-center">
   <p>©Twitreat,2020</p>
 </footer> -->
-
-<script>
-  function fun3(){
-    var x = document.getElementById("comms")
-
-    if(x.style.display=="none")
-        x.style.display = "block";
-
-    else x.style.display = "none";
-  }
-</script>
 
 </body>
 </html>
