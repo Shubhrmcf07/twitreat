@@ -87,6 +87,18 @@
 		 <br>
          <input class="btn btn-success" type="submit" value="Update Bio"/>
        </form>
+       <br><br>
+       <h5>Add a location to help us serve you better!</h5>
+       <button onclick="fun4()">Add Details</button>
+
+       <form action="/updUser" method="POST" id="upd" style="display: none;">
+        <br>
+        city : <input type="text" name="city"><br>
+        country : <input type="text" name="country" id=""><br>
+        Phone : <input type="text" name="phone"><br>
+    <br>
+        <input class="btn btn-success" type="submit" value="Update Location"/>
+      </form>
     </div>
     <div class="col-sm-6">
 
@@ -106,7 +118,7 @@
      <!--  -->
      <!-- Posts -->
      {% for i in range (data|length) %}
-      <form method="post" action="/comment">
+      <form method="post">
               <div class="panel panel-default">
                 <div class="panel-footer">
 					<span class="pull-left"><b>{{user.username}}</b></span>
@@ -123,9 +135,11 @@
                 <div class="panel-footer">
                 <div class="input-group">
                   <input class="form-control" type="text" name="content" placeholder="Add a comment...">
-                  <span class="input-group-btn">
-                    <button class="btn btn-success" type="submit" name="comment" value="{{data[i][0]}}">Comment</button>
+                  <span class="input-group-btn">  
+                    <button class="btn btn-success" type="submit" formaction="/like" name="like" value="{{data[i][0]}}">Like</button>
+                    <button class="btn btn-success" type="submit" name="comment" formaction="/comment" value="{{data[i][0]}}">Comment</button>
                   </span>
+                  {{count[i][0]}} 
                 </div>
               </form>
             </div>
@@ -187,6 +201,15 @@
         x.style.display = "block";
 
     else x.style.display = "none";
+  }
+
+  function fun4(){
+    var x = document.getElementById("upd")
+
+    if(x.style.display=="none")
+        x.style.display = "block";
+      
+      else x.style.display = "none"
   }
 </script>
 

@@ -26,6 +26,7 @@ bcrypt = Bcrypt(app)
 app.secret_key = "thisisatopsecretkey"
 socketio = SocketIO(app)
 
+
 def getuserdata(userdata):
     userdata['username'] = session['username']
     userdata['userid'] = session['userid']
@@ -295,14 +296,20 @@ def myprofile():
             data = cursor.fetchall()
 
             l = []
-
+            count = []
             for i in range(len(data)):
                 cursor.execute(
                     "select * from Comments,Users where user_id=id and post_id="+str(data[i][0]))
                 result = cursor.fetchall()
                 l.append(result)
+                cursor.execute(
+                    "select count(*) from Likes where p_id=%s" % (data[i][0]))
+                cnt = cursor.fetchone()
+                count.append(cnt)
 
-            return render_template('./profile.html', userdata=userdata, user=session, data=data, tr=l)
+                print(count)
+
+            return render_template('./profile.html', userdata=userdata, user=session, data=data, tr=l, count=count)
 
         return render_template('./login.html', error="You must be logged in!")
 
@@ -495,17 +502,51 @@ def even(choice, id):
     mydb.commit()
     return redirect(url_for('events'))
 
+
 @app.route('/messenger')
 def messenger():
     return render_template('messenger.html')
 
-def messageReceived(methods=['GET','POST']):
+
+def messageReceived(methods=['GET', 'POST']):
     print('Received')
 
+
 @socketio.on('my event')
-def handle_my_custom_event(json, methods=['GET','POST']):
+def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('Event:' + str(json))
-    socketio.emit('my response',json,callback=messageReceived)
+    socketio.emit('my response', json, callback=messageReceived)
+
+
+@app.route('/updUser', methods=['POST'])
+def updUser():
+    city = request.form['city']
+    country = request.form['country']
+    phone = request.form['phone']
+
+    cursor.execute("update Users set city=%s , country=%s, phone_number=%s where id=%s",
+                   (city, country, phone, session['userid']))
+    mydb.commit()
+    return redirect(session['url'])
+
+
+@app.route('/like', methods=['POST'])
+def like():
+    u_id = session['userid']
+    p_id = request.form['like']
+
+    cursor.execute(
+        "select * from Likes where u_id=%s and p_id=%s", (u_id, p_id))
+    data = cursor.fetchall()
+    if len(data) > 0:
+        cursor.execute(
+            "delete from Likes where u_id = %s and p_id=%s", (u_id, p_id))
+        mydb.commit()
+        return redirect(url_for('myprofile'))
+
+    cursor.execute("insert into Likes values (%s, %s)", (u_id, p_id))
+    mydb.commit()
+    return redirect(url_for('myprofile'))
 
 @app.route('/profile/<string:id>/')
 def profile(id):
@@ -532,4 +573,4 @@ def profile(id):
 	return render_template('friend.html', user=user, data=data, tr=l, friends=friends)
 
 if __name__ == "__main__":
-    socketio.run(app,port=3000, debug=True)
+    socketio.run(app, port=3000, debug=True)

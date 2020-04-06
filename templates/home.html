@@ -133,7 +133,7 @@
      <!--  -->
      <!-- Posts -->
 	 {% for p in userdata['posts'] %}
-	  <form method="post" action="comment">
+	  <form method="post">
 			  <div class="panel panel-default">
 				<div class="panel-footer">
 				   <span class="pull-left"><b>{{p[0]}}</b></span>
@@ -150,7 +150,8 @@
 				<div class="input-group">
 				  <input class="form-control" type="text" name="content" placeholder="Add a comment...">
 				  <span class="input-group-btn">
-					<button class="btn btn-success" type="submit" name="comment" value="{{p[3]}}">Comment</button>
+            <button class="btn btn-success" type="submit" formaction="/like" name="like" value="{{p[3]}}">Like</button>
+					<button class="btn btn-success" type="submit" name="comment" formaction="/comment" value="{{p[3]}}">Comment</button>
 				  </span>
 				</div>
 			  </form>
