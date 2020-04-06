@@ -148,9 +148,14 @@
 				</div>
 				<div class="panel-footer">
 				<div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-primary" type="submit" formaction="/like" name="like" value="{{p[3]}}">Like</button>
+					</span>
+					<span class="input-group-btn">
+						<button class="btn btn-primary" onclick="return false">{{ userdata['likes'][p[3]][0][0] }}</button>
+					</span>
 				  <input class="form-control" type="text" name="content" placeholder="Add a comment...">
 				  <span class="input-group-btn">
-            <button class="btn btn-success" type="submit" formaction="/like" name="like" value="{{p[3]}}">Like</button>
 					<button class="btn btn-success" type="submit" name="comment" formaction="/comment" value="{{p[3]}}">Comment</button>
 				  </span>
 				</div>

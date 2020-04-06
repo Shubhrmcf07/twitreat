@@ -88,16 +88,16 @@
          <input class="btn btn-success" type="submit" value="Update Bio"/>
        </form>
        <br><br>
-       <h5>Add a location to help us serve you better!</h5>
-       <button onclick="fun4()">Add Details</button>
-
+       <h5>Update Additional Details</h5>
+       <button class="btn btn-success" onclick="fun4()">Add Details</button>
        <form action="/updUser" method="POST" id="upd" style="display: none;">
         <br>
-        city : <input type="text" name="city"><br>
-        country : <input type="text" name="country" id=""><br>
-        Phone : <input type="text" name="phone"><br>
-    <br>
-        <input class="btn btn-success" type="submit" value="Update Location"/>
+		<div class="form-group">
+			<input class="form-control" type="text" name="city" placeholder="City">
+	        <input class="form-control" type="text" name="country" placeholder="Country">
+	        <input class="form-control" type="text" name="phone" placeholder="Phone Number">
+	        <input class="btn btn-success" type="submit" value="Update Details"/>
+		</div>
       </form>
     </div>
     <div class="col-sm-6">
@@ -134,12 +134,16 @@
                 </div>
                 <div class="panel-footer">
                 <div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-primary" type="submit" formaction="/like" name="like" value="{{data[i][0]}}">Like</button>>
+					</span>
+					<span class="input-group-btn">
+						<button class="btn btn-primary" onclick="return false">{{count[i][0]}}</button>
+					</span>
                   <input class="form-control" type="text" name="content" placeholder="Add a comment...">
-                  <span class="input-group-btn">  
-                    <button class="btn btn-success" type="submit" formaction="/like" name="like" value="{{data[i][0]}}">Like</button>
+                  <span class="input-group-btn">
                     <button class="btn btn-success" type="submit" name="comment" formaction="/comment" value="{{data[i][0]}}">Comment</button>
                   </span>
-                  {{count[i][0]}} 
                 </div>
               </form>
             </div>
@@ -194,6 +198,24 @@
 </footer> -->
 
 <script>
+function fun(){
+    var x = document.getElementById("frm")
+
+    if(x.style.display=="none")
+        x.style.display = "block";
+
+    else x.style.display = "none";
+  }
+
+  function fun2(){
+    var x = document.getElementById("frm2")
+
+    if(x.style.display=="none")
+        x.style.display = "block";
+
+    else x.style.display = "none";
+  }
+  
   function fun3(){
     var x = document.getElementById("comms")
 
@@ -208,7 +230,7 @@
 
     if(x.style.display=="none")
         x.style.display = "block";
-      
+
       else x.style.display = "none"
   }
 </script>
