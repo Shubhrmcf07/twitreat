@@ -6,7 +6,7 @@ from flask import *
 from flask_bcrypt import Bcrypt
 from datetime import date
 from werkzeug.utils import secure_filename
-from flask_socketio import SocketIO,join_room,leave_room
+from flask_socketio import SocketIO
 import random
 import datetime
 
@@ -43,13 +43,6 @@ def getuserfriends(userdata):
 	userdata['friends'] = friends
 	# print(friends)
 
-def getusermessages(messagedata,room):
-    # print("Get users room :"+str(room))
-    sql = "select Content,name,media,timestamp from Messages,Users  where Messages.`From`=Users.id and room_id= %s order by timestamp" % (room)
-    cursor.execute(sql)
-    messages = cursor.fetchall()
-    for message in messages:
-        messagedata.append(message)
 
 def getusergroups(userdata):
 	# displays all groups user is in
@@ -521,45 +514,6 @@ def even(choice, id):
 	return redirect(url_for('events'))
 
 
-<<<<<<< HEAD
-@app.route('/messages',methods=['GET','POST'])
-def show_contacts():
-    userdata = {}
-    getuserdata(userdata)
-    getuserfriends(userdata)
-    getusergroups(userdata)
-    
-    return render_template("./messages.html",userdata=userdata,user=session['userid'], auth=session)
-
-@app.route('/messenger/<int:id>')
-def messenger(id):
-    rid=id
-    userdata={}
-    messagedata=[]
-    getuserdata(userdata)
-    getusermessages(messagedata,rid)
-    print("Room messages :" + str(messagedata))
-    return render_template('./messenger.html',room=rid,userdata=userdata,messagedata=messagedata)
-
-@socketio.on('send_message')
-def handle_send_message_event(data):
-    app.logger.info("{} has sent message to the room {}: {}".format(data['username'],data['room'],data['message']))
-    sql = "insert into Messages (`From`,`room_id`,`To`,`Content`) values (%s,%s,%s,%s)" 
-    cursor.execute(sql,(data['user_id'],data['room'],data['friend_id'],data['message']))
-    mydb.commit()
-    socketio.emit('receive_message', data, room=data['room'])
-
-@socketio.on('join_room')
-def handle_join_room_event(json):
-    app.logger.info('Event:' + str(json))
-    join_room(json['room'])
-    socketio.emit('join_room_announcement',json)
-
-@socketio.on('leave_room')
-def handle_leave_room_event(json):
-    leave_room(json['room'])
-    socketio.emit('leave_room_announcement',json)
-=======
 @app.route('/messenger')
 def messenger():
 	return render_template('messenger.html')
@@ -628,7 +582,6 @@ def profile(id):
 	friends = cursor.fetchall()
 
 	return render_template('friend.html', user=user, data=data, tr=l, friends=friends)
->>>>>>> refs/remotes/origin/master
 
 if __name__ == "__main__":
 	socketio.run(app, port=3000, debug=True)

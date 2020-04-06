@@ -39,6 +39,7 @@
       <ul class="nav navbar-nav">
         <li><a href="/">Home</a></li>
         <li><a href="#">Messages</a></li>
+		<li><a href="/events">Events</a></li>
       </ul>
       <!-- <form class="navbar-form navbar-right" role="search">
         <div class="form-group input-group">
@@ -120,6 +121,12 @@
 				</div>
 				<div class="panel-footer">
 				<div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-primary" type="submit" formaction="/like" name="like" value="{{p[3]}}">Like</button>
+					</span>
+					<span class="input-group-btn">
+						<button class="btn btn-primary" onclick="return false">{{ userdata['likes'][p[3]][0][0] }}</button>
+					</span>
 				  <input class="form-control" type="text" name="content" placeholder="Add a comment...">
 				  <span class="input-group-btn">
 					<button class="btn btn-success" type="submit" name="comment" value="{{p[3]}}">Comment</button>
@@ -151,10 +158,14 @@
 			<h4>Group Members</h4>
 			<br>
 			{% for u in users %}
-				{{u[3]}}
+				{% if u[0] == session.userid %}
+				<a href="/myprofile" style="font-size: 20px;">{{u[3]}}</a>
+				{% else %}
+			    <a href="/profile/{{u[0]}}" style="font-size: 20px;">{{u[3]}}</a>
+				{% endif %}
 				<br>
 			{% endfor %}
-		</div>	
+		</div>
 		{% if (userdata['othergroups']|length) > 0 %}
 		<div class="well">
 	        <h4>Groups you may like</h4>

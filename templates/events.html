@@ -1,26 +1,162 @@
-<form action="/createvent" method="post">
-  Location : <input type="text" name="location" /> <br />
-  Description :<textarea name="edesc" cols="30" rows="10"></textarea><br />
-  <input type="submit" value="Create Event" />
-</form>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Twitreat</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="static/CSS/base.css" />
+    <script src="static/JS/jquery.js"></script>
+    <script src="static/JS/bootstrap.js"></script>
+    <style>
+      /* Set black background color, white text and some padding */
+      footer {
+        background-color: #333333;
+        color: white;
+        padding: 15px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target="#myNavbar"
+          >
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/myprofile">Twitreat</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Messages</a></li>
+            <li><a href="/events">Events</a></li>
+          </ul>
+          <!-- <form class="navbar-form navbar-right" role="search">
+        <div class="form-group input-group">
+          <input type="text" class="form-control" placeholder="Search..">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+          </span>
+        </div>
+      </form> -->
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-<div style="float: right;">
-  1. {% for i in host %} {{i[3]}}
-  <a href="even/dele/{{i[0]}}"><button>Delete Event</button></a>
-  <br />
-  {% endfor %}
-</div>
+    <div
+      class="container-fluid text-center"
+      style="
+        padding-right: 65px;
+        padding-left: 65px;
+        margin-right: auto;
+        margin-left: auto;
+      "
+    >
+      <!-- <div class="row">
+    <div class="well">
+      <p>Title</p>
+    </div>
+  </div> -->
+      <div class="row">
+        <div class="col-sm-3 well">
+          <div class="well">
+            <a href="/myprofile"
+              ><img
+                src="{{auth.picture}}"
+                class="img-circle"
+                height="85"
+                width="85"
+                alt="Avatar"
+            /></a>
+            {% if auth.bio != None %}
+            <h3>Bio</h3>
+            <h5><i>"{{auth.bio}}"</i></h5>
+            {% endif %}
+          </div>
+          <div class="well">
+            <h4>Recommended Events</h4>
+            {% for i in range (recommended|length) %} {{recommended[i][3]}}
+            <a href="even/join/{{recommended[i][0]}}"
+              ><button>Interested</button></a
+            >
+            <br />
+            {% for j in range (tr[i]|length) %} {{tr[i][j][1]}} {% endfor %} {%
+            endfor %}
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <!-- Add Post -->
+          <div class="well">
+            <form
+              method="post"
+              action="/createvent"
+              enctype="multipart/form-data"
+            >
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="location"
+                  placeholder="Location..."
+                />
+                <textarea
+                  class="form-control"
+                  name="edesc"
+                  cols="80"
+                  rows="10"
+                  placeholder="Description..."
+                ></textarea>
+              </div>
+              <span class="input-group-btn">
+                <button class="btn btn-success" type="submit" name="createvent">
+                  Create Event
+                </button>
+              </span>
+            </form>
+          </div>
+          <!--  -->
+        </div>
 
-<div class="col-sm-6" style="float: middle;">
-  2. {% for i in attending %} {{i[3]}}
-  <a href="even/withdraw/{{i[0]}}"><button>Withdraw From Event</button></a>
-  <br />
-  {% endfor %}
-</div>
-
-<div class="col-sm-3 well">
-  3. {% for i in range (recommended|length) %} {{recommended[i][3]}}
-  <a href="even/join/{{recommended[i][0]}}"><button>Interested</button></a>
-  <br />
-  {% for j in range (tr[i]|length) %} {{tr[i][j][1]}} {% endfor %} {% endfor %}
-</div>
+        <div class="col-sm-3 well">
+          <div class="well">
+            {% for i in host %}
+            <h4>{{i[3]}}</h4>
+            <a href="even/dele/{{i[0]}}"
+              ><button class="btn btn-danger">Delete Event</button></a
+            >
+            <br />
+            {% endfor %}
+            <br />
+            <h5>Attendees</h5>
+            {% for i in attending %}
+            <h4>{{i[3]}}</h4>
+            <a href="even/withdraw/{{i[0]}}"
+              ><button class="btn btn-danger">Withdraw From Event</button></a
+            >
+            <br />
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--
+<footer class="container-fluid text-center">
+  <p>©Twitreat,2020</p>
+</footer> -->
+  </body>
+</html>

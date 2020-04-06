@@ -36,6 +36,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+<<<<<<< HEAD
                 <a class="navbar-brand" href="#">Twitreat</a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
@@ -45,6 +46,17 @@
                     <li><a href="/events">Browse Events</a></li>
                 </ul>
                 <!-- <form class="navbar-form navbar-right" role="search">
+=======
+	  <a class="navbar-brand" href="#">Twitreat</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="#">Messages</a></li>
+        <li><a href="/events">Events</a></li>
+      </ul>
+      <!-- <form class="navbar-form navbar-right" role="search">
+>>>>>>> refs/remotes/origin/master
         <div class="form-group input-group">
           <input type="text" class="form-control" placeholder="Search..">
           <span class="input-group-btn">
@@ -67,6 +79,7 @@
       <p>Title</p>
     </div>
   </div> -->
+<<<<<<< HEAD
         <div class="row">
             <div class="col-sm-3 well">
                 <div class="well">
@@ -76,6 +89,57 @@
                     <h5><i>"{{auth.bio}}"</i></h5>
                     {% endif %}
                 </div>
+=======
+  <div class="row">
+    <div class="col-sm-3 well">
+      <div class="well">
+        <a href="/myprofile"><img src="{{auth.picture}}" class="img-circle" height="85" width="85" alt="Avatar"></a>
+        {% if auth.bio != None %}
+		<h3>Bio</h3>
+        <h5><i>"{{auth.bio}}"</i></h5>
+        {% endif %}
+      </div>
+
+	  <div class="well">
+		  <h4>Friend Requests</h4>
+                {% for f in userdata['requests'] %}
+                  <a href="/profile/{{f[0]}}" style="font-size: 20px;">{{f[1]}}</a>
+				  <br>
+                  <a class="text-success" href="requests/add/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Accept</button></a>
+                  <a class="text-danger" href="requests/delete/{{f[0]}}"><button type="button" class="btn btn-danger" name="button">Decline</button></a>
+				  <br>
+                {% endfor %}
+	  </div>
+
+	  <div class="well">
+		  <h4>Friends</h4>
+              <ul>
+                {% for f in userdata['friends'] %}
+                  <a href="/profile/{{f[1]}}" style="font-size: 20px;">{{f[0]}}</a>
+                  <a class="text-danger" href="friends/delete/{{f[1]}}"><button type="button" class="btn btn-danger" name="button">Unfriend</button></a>
+				  <br>
+                {% endfor %}
+              </ul>
+      </div>
+
+      <div class="well">
+        <h4>Groups</h4>
+                <ul>
+                  {% for f in userdata['groups'] %}
+                    <a href="/groupposts/{{f[0]}}" style="font-size: 20px;">{{f[1]}}</a>
+                    <a class="text-danger" href="groups/leave/{{f[0]}}"><button type="button" class="btn btn-danger" name="button">Leave Group</button></a>
+            <br>
+			<br>
+                  {% endfor %}
+                </ul>
+		          <button class="btn btn-success" onclick="fun3()">Create a group</button>
+		          <form action="/creategroup" method="post" id="comms">
+		              <input class="form-control" type="text" name="cname" placeholder="Name"><br>
+		              <textarea class="form-control" name="cdesc" cols="30" rows="10" placeholder="Description"></textarea>
+		              <input class="btn btn-success" type="submit" value="Create Group">
+		          </form>
+        </div>
+>>>>>>> refs/remotes/origin/master
 
                 <div class="well">
                     <h4>Friend Requests</h4>
@@ -125,6 +189,7 @@
                             <span class="input-group-btn">
               <button class="btn btn-success" type="submit" name="post">Post</button>
             </span>
+<<<<<<< HEAD
                         </div>
                         <br>
                         <input class="form-control-file" type="file" name="picture" />
@@ -149,6 +214,40 @@
                                 <input class="form-control" type="text" name="content" placeholder="Add a comment...">
                                 <span class="input-group-btn">
 					<button class="btn btn-success" type="submit" name="comment" value="{{p[3]}}">Comment</button>
+=======
+          </div>
+          <br>
+      <input class="form-control-file" type="file" name="picture"/>
+        </form>
+     </div>
+     <!--  -->
+     <!-- Posts -->
+	 {% for p in userdata['posts'] %}
+	  <form method="post">
+			  <div class="panel panel-default">
+				<div class="panel-footer">
+				   <span class="pull-left"><b>{{p[0]}}</b></span>
+				   <span class="pull-right">{{p[2]}} &ensp;</span>
+				   <span><br><br> </span>
+				</div>
+				<div class="panel-body">
+				  <p>{{p[1]}}</p><br>
+				  {% if p[4] != "None" %}
+				  	<img src="{{p[4]}}" height="200px" width="200px">
+				  {%endif%}
+				</div>
+				<div class="panel-footer">
+				<div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-primary" type="submit" formaction="/like" name="like" value="{{p[3]}}">Like</button>
+					</span>
+					<span class="input-group-btn">
+						<button class="btn btn-primary" onclick="return false">{{ userdata['likes'][p[3]][0][0] }}</button>
+					</span>
+				  <input class="form-control" type="text" name="content" placeholder="Add a comment...">
+				  <span class="input-group-btn">
+					<button class="btn btn-success" type="submit" name="comment" formaction="/comment" value="{{p[3]}}">Comment</button>
+>>>>>>> refs/remotes/origin/master
 				  </span>
                             </div>
                 </form>
@@ -168,6 +267,7 @@
                 <!--  -->
             </div>
 
+<<<<<<< HEAD
             <div class="col-sm-3 well">
                 <h4>People You May Know</h4>
                 <hr> {% for f in userdata['otherusers'] %}
@@ -183,6 +283,28 @@
                 <hr> {% endfor %} {% endif %}
             </div>
         </div>
+=======
+    <div class="col-sm-3 well">
+      <h4>People You May Know</h4>
+	  <hr>
+      {% for f in userdata['otherusers'] %}
+			<a href="/profile/{{f[0]}}" style="font-size: 20px;">{{f[1]}}</a>
+			<br>
+      		<a class="text-success" href="friends/add/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Add Friend</button></a>
+			<hr>
+      {% endfor %}
+
+      {% if (userdata['othergroups']|length) > 0 %}
+      <h4>Groups you may like</h4>
+	  <hr>
+      {% for f in userdata['othergroups'] %}
+			<a href="#" style="font-size: 20px;">{{f[1]}}</a>
+			<br>
+      		<a class="text-success" href="groups/join/{{f[0]}}"><button type="button" class="btn btn-success" name="button">Join Group</button></a>
+			<hr>
+      {% endfor %}
+      {% endif %}
+>>>>>>> refs/remotes/origin/master
     </div>
 
     <!-- <footer class="container-fluid text-center">
