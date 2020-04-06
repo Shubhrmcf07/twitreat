@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Twitreat</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="static/CSS/base.css">
+    <script src="static/JS/jquery.js"></script>
+    <script src="static/JS/bootstrap.js"></script>
+    <style>
+        /* Set black background color, white text and some padding */
+
+        footer {
+            background-color: #333333;
+            color: white;
+            padding: 15px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+                <a class="navbar-brand" href="/myprofile">Twitreat</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#">Messages</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> My Account</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid text-center" style="padding-right: 65px; padding-left: 65px; margin-right: auto; margin-left: auto;">
+        <div class="row">
+            <div class="col-sm-3 well">
+                <div class="well">
+                    <p><a href="/myprofile">My Profile</a></p>
+                    <img src="bird.jpg" class="img-circle" height="65" width="65" alt="Avatar">
+                </div>
+                <div class="well">
+                    <p>{{user.bio}}</p>
+                </div>
+            </div>
+        </div>
+        <!--  -->
+        <div class="friends">
+            <h4>Friends</h4>
+            <hr> {% for f in userdata['friends'] %}
+            <a href="/messenger/{{userdata['userid'] + f[1]}}" style="font-size: 20px;">{{f[0]}}</a>
+            <br>{% endfor %}
+        </div>
+
+        <div class="col-sm-3 well">
+            <div class="well">
+                <p>Stuff</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="container-fluid text-center">
+        <p>©Twitreat,2020</p>
+    </footer>
+
+</body>
+
+</html>

@@ -7,6 +7,7 @@ from flask_bcrypt import Bcrypt
 from datetime import date
 from werkzeug.utils import secure_filename
 from flask_socketio import SocketIO
+from flask_socketio import SocketIO,join_room,leave_room
 import random
 import datetime
 
@@ -105,7 +106,6 @@ def getcommunity(comm, id):
 	comm['description'] = comms[0][2]
 	#comm['owner'] = comments[0][3]
 
-
 def getcommunityposts(userdata, id):
 	sql = 'select name,content,time_stamp,p_id,photo from Users,Posts where community = %s and u_id = id and (u_id in (select u2_id from Friends where u1_id =%s) or u_id = %s)' % (
 		id, session["userid"], session["userid"])
@@ -123,6 +123,14 @@ def getcommunityposts(userdata, id):
 		cursor.execute(sql)
 		likes[p[3]] = cursor.fetchall()
 	userdata['likes'] = likes
+
+def getusermessages(messagedata,room):
+    # print("Get users room :"+str(room))
+    sql = "select Content,name,media,timestamp from Messages,Users  where Messages.`From`=Users.id and room_id= %s order by timestamp" % (room)
+    cursor.execute(sql)
+    messages = cursor.fetchall()
+    for message in messages:
+        messagedata.append(message)
 
 
 def auth(page):
@@ -514,20 +522,43 @@ def even(choice, id):
 	return redirect(url_for('events'))
 
 
-@app.route('/messenger')
-def messenger():
-	return render_template('messenger.html')
+@app.route('/messages',methods=['GET','POST'])
+def show_contacts():
+    userdata = {}
+    getuserdata(userdata)
+    getuserfriends(userdata)
+    getusergroups(userdata)
 
+    return render_template("./messages.html",userdata=userdata,user=session['userid'], auth=session)
 
-def messageReceived(methods=['GET', 'POST']):
-	print('Received')
+@app.route('/messenger/<int:id>')
+def messenger(id):
+    rid=id
+    userdata={}
+    messagedata=[]
+    getuserdata(userdata)
+    getusermessages(messagedata,rid)
+    print("Room messages :" + str(messagedata))
+    return render_template('./messenger.html',room=rid,userdata=userdata,messagedata=messagedata)
 
+@socketio.on('send_message')
+def handle_send_message_event(data):
+    app.logger.info("{} has sent message to the room {}: {}".format(data['username'],data['room'],data['message']))
+    sql = "insert into Messages (`From`,`room_id`,`To`,`Content`) values (%s,%s,%s,%s)"
+    cursor.execute(sql,(data['user_id'],data['room'],data['friend_id'],data['message']))
+    mydb.commit()
+    socketio.emit('receive_message', data, room=data['room'])
 
-@socketio.on('my event')
-def handle_my_custom_event(json, methods=['GET', 'POST']):
-	print('Event:' + str(json))
-	socketio.emit('my response', json, callback=messageReceived)
+@socketio.on('join_room')
+def handle_join_room_event(json):
+    app.logger.info('Event:' + str(json))
+    join_room(json['room'])
+    socketio.emit('join_room_announcement',json)
 
+@socketio.on('leave_room')
+def handle_leave_room_event(json):
+    leave_room(json['room'])
+    socketio.emit('leave_room_announcement',json)
 
 @app.route('/updUser', methods=['POST'])
 def updUser():
